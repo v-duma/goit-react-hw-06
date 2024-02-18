@@ -1,43 +1,45 @@
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { addContact, deleteContact } from "../redux/contactsSlice";
+import { setFilter } from "../redux/filtersSlice";
 import { ContactForm } from "./ContactForm/ContactForm";
 import { SearchBox } from "./SearchBox/SearchBox";
 import { ContactList } from "./ContactList/ContactList";
-import "./App.css";
 
 function App() {
-  const initialContacts = JSON.parse(localStorage.getItem("contacts")) || [
-    { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-    { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-    { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-    { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-  ];
+  const dispatch = useDispatch();
+  const contacts = useSelector((state) => state.contacts.items);
+  const filter = useSelector((state) => state.filters.name);
 
-  const [contacts, setContacts] = useState(initialContacts);
-  const [filter, setFilter] = useState("");
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
-
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
-
-  const handleDeleteContact = (id) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== id)
-    );
-  };
-
+  // Фільтрація контактів за назвою
   const filteredContacts = contacts.filter((contact) =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Завантаження контактів з локального сховища при запуску
+  useEffect(() => {
+    const initialContacts = JSON.parse(localStorage.getItem("contacts")) || [];
+    initialContacts.forEach((contact) => dispatch(addContact(contact)));
+  }, [dispatch]);
+
+  const handleAddContact = (contact) => {
+    dispatch(addContact(contact));
+  };
+
+  const handleDeleteContact = (id) => {
+    dispatch(deleteContact(id));
+  };
+
+  const handleFilterChange = (event) => {
+    dispatch(setFilter(event.target.value));
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
-      <ContactForm setContacts={setContacts} />
+      <ContactForm setContacts={handleAddContact} />
       <SearchBox filter={filter} handleFilterChange={handleFilterChange} />
+
       <ContactList
         contacts={filteredContacts}
         onDeleteContact={handleDeleteContact}

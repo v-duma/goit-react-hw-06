@@ -1,16 +1,21 @@
+// ContactList.jsx
 import css from "./ContactList.module.css";
 import { FaUser } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { deleteContact } from "/src/redux/contactsSlice.js";
 
-export const ContactList = ({ contacts, onDeleteContact }) => {
+export const ContactList = ({ contacts }) => {
+  const dispatch = useDispatch();
+
   const handleDelete = (id) => {
-    onDeleteContact(id);
+    dispatch(deleteContact(id));
   };
 
   return (
     <div>
-      {contacts.map((contact) => (
-        <div key={contact.id} className={css.contact}>
+      {contacts.map((contact, index) => (
+        <div key={index} className={css.contact}>
           <div className={css.name_number}>
             <p>
               <FaUser />

@@ -1,5 +1,16 @@
+// SearchBox.jsx
 import css from "./SearchBox.module.css";
-export const SearchBox = ({ filter, handleFilterChange }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { setFilter } from "/src/redux/filtersSlice.js";
+
+export const SearchBox = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector((state) => state.filters.name);
+
+  const handleFilterChange = (event) => {
+    dispatch(setFilter(event.target.value));
+  };
+
   return (
     <div className={css.search_div}>
       <label>Find contacts by name</label>
