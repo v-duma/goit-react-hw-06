@@ -1,4 +1,3 @@
-// ContactList.jsx
 import css from "./ContactList.module.css";
 import { FaUser } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";

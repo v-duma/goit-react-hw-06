@@ -23,7 +23,7 @@ export const ContactForm = () => {
   const handleSubmit = (values, actions) => {
     const contactWithId = { ...values, id: nanoid() };
 
-    dispatch(addContact(contactWithId));
+    dispatch(addContact(contactWithId)); // Передавати лише потрібні дані
     actions.resetForm();
   };
 
