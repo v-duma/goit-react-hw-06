@@ -1,4 +1,3 @@
-// ContactForm.jsx
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { nanoid } from "nanoid";
@@ -22,8 +21,7 @@ export const ContactForm = () => {
 
   const handleSubmit = (values, actions) => {
     const contactWithId = { ...values, id: nanoid() };
-
-    dispatch(addContact(contactWithId)); // Передавати лише потрібні дані
+    dispatch(addContact(contactWithId));
     actions.resetForm();
   };
 

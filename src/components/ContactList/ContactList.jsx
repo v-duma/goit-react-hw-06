@@ -1,11 +1,24 @@
 import css from "./ContactList.module.css";
 import { FaUser } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteContact } from "/src/redux/contactsSlice.js";
+import { createSelector } from "reselect";
 
-export const ContactList = ({ contacts }) => {
+export const ContactList = () => {
   const dispatch = useDispatch();
+
+  // Використання мемоізованого селектора
+  const filteredContactsSelector = createSelector(
+    (state) => state.contacts.items,
+    (state) => state.filters.name,
+    (contacts, filter) =>
+      contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(filter.toLowerCase())
+      )
+  );
+
+  const filteredContacts = useSelector(filteredContactsSelector);
 
   const handleDelete = (id) => {
     dispatch(deleteContact(id));
@@ -13,7 +26,7 @@ export const ContactList = ({ contacts }) => {
 
   return (
     <div>
-      {contacts.map((contact, index) => (
+      {filteredContacts.map((contact, index) => (
         <div key={index} className={css.contact}>
           <div className={css.name_number}>
             <p>
